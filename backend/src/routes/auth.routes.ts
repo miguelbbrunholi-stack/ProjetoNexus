@@ -164,7 +164,14 @@ authRoutes.post('/recuperar-senha', async (req, res, next) => {
         'INSERT INTO recuperacoes_senha (id_usuario, token, expira_em) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 15 MINUTE))',
         [users[0].id_usuario, codeHash],
       );
-      await sendRecoveryCode(email, code);
+      try {
+        await sendRecoveryCode(email, code);
+      } catch (error) {
+        console.error('Erro ao enviar e-mail de recuperação:', error);
+        return res.status(503).json({
+          mensagem: 'Não foi possível enviar o e-mail de recuperação. Verifique a configuração SMTP.',
+        });
+      }
     }
 
     res.json({ mensagem: 'Se o e-mail estiver cadastrado, um código será enviado.' });
