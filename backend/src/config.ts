@@ -20,8 +20,13 @@ export const config = {
   email: {
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
     port: Number(process.env.EMAIL_PORT || 587),
-    user: process.env.EMAIL_USER,
-    password: process.env.EMAIL_PASSWORD,
-    from: process.env.EMAIL_FROM || 'Nexus Finance <noreply@nexusfinance.com>',
+    secure: String(process.env.EMAIL_SECURE || 'false').toLowerCase() === 'true',
+    user: process.env.EMAIL_USER || '',
+    password: process.env.EMAIL_PASSWORD || '',
+    from:
+      process.env.EMAIL_FROM ||
+      (process.env.EMAIL_USER
+        ? `Nexus Finance <${process.env.EMAIL_USER}>`
+        : 'Nexus Finance <noreply@nexusfinance.com>'),
   },
 };
