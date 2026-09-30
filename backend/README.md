@@ -37,7 +37,22 @@ Todas as rotas após as rotas de autenticação exigem o header `Authorization: 
 
 ## Recuperação de senha
 
-Se `EMAIL_USER` e `EMAIL_PASSWORD` estiverem configurados, o código será enviado por SMTP. Em desenvolvimento, sem essas variáveis, ele aparece no terminal. O código expira em 15 minutos e é salvo no banco apenas como hash.
+A recuperação usa SMTP real. Configure o arquivo `.env` dentro de `backend`:
+
+```env
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=seuemail@gmail.com
+EMAIL_PASSWORD=sua_senha_de_app_google
+EMAIL_FROM=Nexus Finance <seuemail@gmail.com>
+```
+
+Para Gmail, `EMAIL_PASSWORD` deve ser uma **senha de app**, não a senha normal da conta. Ative a verificação em duas etapas da conta Google e gere uma senha de app. Não salve essa senha no GitHub.
+
+Ao iniciar com `npm run dev`, o backend testa a conexão SMTP. Quando tudo estiver correto, o terminal exibirá `SMTP configurado e autenticado com sucesso.`. Se a autenticação falhar, o terminal mostrará o erro real do Nodemailer.
+
+O código de recuperação possui 6 dígitos, expira em 15 minutos e é salvo no banco apenas como hash. Sem credenciais SMTP válidas, a API retorna erro em vez de fingir que o e-mail foi enviado.
 
 ## Sessão no aplicativo
 
