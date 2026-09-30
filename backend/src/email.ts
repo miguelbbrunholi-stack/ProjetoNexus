@@ -12,6 +12,10 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function verifyEmailTransport(): Promise<void> {
+  if (!config.email.user || !config.email.password) {
+    throw new Error('EMAIL_USER ou EMAIL_PASSWORD não configurado.');
+  }
+
   await transporter.verify();
 }
 
